@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Work App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <!-- 1. Settings Screen -->
+    <div id="settings-screen" class="container">
+        <header>
+            <h1>การตั้งค่า</h1>
+        </header>
+        <main>
+            <div class="form-group">
+                <label for="user-first-name">ชื่อ</label>
+                <input type="text" id="user-first-name" placeholder="กรอกชื่อจริง">
+            </div>
+            <div class="form-group">
+                <label for="user-last-name">นามสกุล</label>
+                <input type="text" id="user-last-name" placeholder="กรอกนามสกุล">
+            </div>
+            <div class="form-group">
+                <label for="user-position">ตำแหน่ง</label>
+                <input type="text" id="user-position" placeholder="เช่น ครู, ผู้ช่วยครู">
+            </div>
+            <div class="form-group">
+                <label for="workplace-name">ชื่อที่ทำงาน</label>
+                <input type="text" id="workplace-name" placeholder="กรอกชื่อที่ทำงาน">
+            </div>
+            <hr class="divider">
+            <div class="form-group">
+                <label>จัดการงานที่ทำบ่อย ๆ</label>
+                <div class="input-group">
+                    <input type="text" id="new-frequent-task" placeholder="เพิ่มงานใหม่...">
+                    <button id="add-frequent-task-btn">+</button>
+                </div>
+                <ul id="frequent-tasks-list"></ul>
+            </div>
+            <hr class="divider">
+            <div class="form-group">
+                <label>จัดการวิชาที่สอนบ่อย ๆ</label>
+                <div class="input-group">
+                    <input type="text" id="new-frequent-subject" placeholder="เพิ่มวิชาใหม่...">
+                    <button id="add-frequent-subject-btn">+</button>
+                </div>
+                <ul id="frequent-subjects-list"></ul>
+            </div>
+            <button id="save-settings-btn" class="btn-primary">บันทึกและปิด</button>
+        </main>
+    </div>
+
+    <!-- 2. Daily Log Screen -->
+    <div id="daily-log-screen" class="container" style="display: none;">
+        <header>
+            <h1 id="daily-log-header">บันทึกประจำวัน</h1>
+            <div class="header-buttons">
+                <input type="date" id="date-picker">
+                <button id="go-to-settings-btn" class="icon-btn">⚙️</button>
+            </div>
+        </header>
+        <main>
+            <div class="form-group">
+                <label>งานที่ทำบ่อย ๆ</label>
+                <div id="frequent-tasks-checkboxes"></div>
+            </div>
+            <div class="form-group">
+                <label for="other-task-input">งานอื่น ๆ ที่ทำในวันนี้</label>
+                <input type="text" id="other-task-input" placeholder="เช่น รดน้ำต้นไม้, ประชุมผู้ปกครอง">
+            </div>
+            <div class="form-group">
+                <label>วิชาที่สอนบ่อย ๆ</label>
+                <div id="frequent-subjects-checkboxes"></div>
+            </div>
+            <div class="form-group">
+                <label for="other-subject-input">วิชาอื่น ๆ ที่สอนในวันนี้</label>
+                <input type="text" id="other-subject-input" placeholder="เพิ่มวิชาอื่น ๆ (ถ้ามี)">
+            </div>
+            <div class="form-group">
+                <label for="notes-input">บันทึกย่อช่วยจำ</label>
+                <textarea id="notes-input" rows="3" placeholder="บันทึกเหตุการณ์พิเศษหรือรายละเอียดเพิ่มเติม"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="leave-checkbox">
+                    <input type="checkbox" id="leave-checkbox"> ลา
+                </label>
+                <input type="text" id="leave-reason" placeholder="เหตุผลการลา (ถ้ามี)" style="display: none;">
+            </div>
+             <div class="form-group">
+                <label for="image-input">แนบรูปภาพ</label>
+                <input type="file" id="image-input" accept="image/*">
+                <img id="image-preview" src="" alt="Image preview" style="display: none; max-width: 100%; margin-top: 10px;"/>
+            </div>
+        </main>
+        <footer>
+            <button id="export-screen-btn" class="btn-secondary">ส่งออกรายงาน</button>
+        </footer>
+    </div>
+
+    <!-- 3. Monthly Export Screen -->
+    <div id="export-screen" class="container" style="display: none;">
+        <header>
+            <button id="back-to-log-btn" class="btn-secondary">&lt; กลับ</button>
+            <h1>ส่งออกรายงานรายเดือน</h1>
+        </header>
+        <main>
+            <div class="form-group">
+                <label for="month-selector">เลือกเดือนและปี</label>
+                <input type="month" id="month-selector">
+            </div>
+            <div class="table-container">
+                <table id="export-preview-table">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>งานที่ทำ</th>
+                            <th>วิชาที่สอน</th>
+                            <th>หมายเหตุ</th>
+                            <th>รูปภาพ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="export-excel-btn" class="btn-primary">ส่งออกเป็น Excel</button>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
