@@ -214,6 +214,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const populateExportTable = () => {
+        const reportHeader = document.getElementById('report-header');
+        const reportUserName = document.getElementById('report-user-name');
+        const reportWorkplace = document.getElementById('report-workplace');
+
+        if (userData.firstName && userData.workplace) {
+            reportUserName.textContent = `${userData.position} ${userData.firstName} ${userData.lastName}`.trim();
+            reportWorkplace.textContent = userData.workplace;
+            reportHeader.style.display = 'block';
+        } else {
+            reportHeader.style.display = 'none';
+        }
+
         exportPreviewTableBody.innerHTML = '';
         const [year, month] = monthSelector.value.split('-');
         if (!year || !month) return;
@@ -320,11 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
     exportExcelBtn.onclick = () => {
         const [year, month] = monthSelector.value.split('-');
         const monthName = new Date(year, month - 1).toLocaleDateString('th-TH', { month: 'long' });
-        const fileName = `รายงานการทำงาน_${userData.firstName || ''}${userData.lastName ? ' ' + userData.lastName : ''}_${monthName}_${year}.xlsx`;
+        const fileName = `รายงานการทำงาน_${monthName}_${year}.xlsx`;
 
-        const dataToExport = [
-            ['วันที่', 'งานที่ทำ', 'วิชาที่สอน', 'หมายเหตุ']
+        const headerData = [
+            ['ชื่อผู้บันทึก:', `${userData.position} ${userData.firstName} ${userData.lastName}`.trim()],
+            ['สถานที่ทำงาน:', userData.workplace],
+            [] // Empty row for spacing
         ];
+
+        const tableHeader = ['วันที่', 'งานที่ทำ', 'วิชาที่สอน', 'หมายเหตุ'];
+
+        const dataToExport = [];
 
         Object.keys(dailyLogs).sort().forEach(date => {
             if (date.startsWith(`${year}-${month}`)) {
@@ -336,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const ws = XLSX.utils.aoa_to_sheet(dataToExport);
+        const ws = XLSX.utils.aoa_to_sheet(headerData.concat([tableHeader]).concat(dataToExport));
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, fileName);

@@ -1,0 +1,21 @@
+{
+  "name": "todays-work-app",
+  "version": "1.0.0",
+  "description": "แอปพลิเคชันสำหรับบันทึกการทำงานประจำวัน ออกแบบมาเพื่อช่วยให้คุณครูหรือผู้ปฏิบัติงานสามารถบันทึกและรายงานผลการทำงานได้อย่างสะดวกและรวดเร็ว",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ossyugioh/todaywork-io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ossyugioh/todaywork-io/issues"
+  },
+  "homepage": "https://github.com/ossyugioh/todaywork-io#readme"
+}
